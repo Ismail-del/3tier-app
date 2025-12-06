@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-frontend-{{ .Values.helmReleaseNamefull }}
+  labels:
+    app: frontend-{{ .Values.helmReleaseName }}
+spec:
+  type: {{ .Values.frontend.service.type }}
+  ports:
+    - port: {{ .Values.frontend.port }}
+      targetPort: {{ .Values.frontend.port }}
+      {{- if .Values.frontend.service.nodePort }}
+      nodePort: {{ .Values.frontend.service.nodePort }}
+      {{- end }}
+  selector:
+    app: frontend-{{ .Values.helmReleaseName }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-backend-{{ .Values.helmReleaseNamefull }}
+  labels:
+    app: backend-{{ .Values.helmReleaseName }}
+spec:
+  ports:
+    - port: {{ .Values.backend.port }}
+      targetPort: {{ .Values.backend.port }}
+  selector:
+    app: backend-{{ .Values.helmReleaseName }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels:
+    app: postgres-{{ .Values.helmReleaseName }}
+spec:
+  ports:
+    - port: {{ .Values.postgres.port }}
+      targetPort: {{ .Values.postgres.port }}
+  selector:
+    app: postgres-{{ .Values.helmReleaseName }}

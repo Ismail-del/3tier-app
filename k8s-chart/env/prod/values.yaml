@@ -1,0 +1,17 @@
+helmReleaseNamefull: beer-app-prod
+helmReleaseName: beer-app-prod
+
+frontend:
+  replicaCount: 2
+  service:
+    type: NodePort
+    nodePort: 30002
+
+backend:
+  replicaCount: 2
+
+postgres:
+  replicaCount: 1
+
+ingress:
+  host: beer-app.local

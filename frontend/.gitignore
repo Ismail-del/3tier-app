@@ -1,0 +1,7 @@
+# Ignore application files
+node_modules
+
+# Local .angular directories
+.angular
+
+

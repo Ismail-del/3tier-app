@@ -1,0 +1,19 @@
+stages:
+  - deploy-uat
+  - deploy-prod
+
+deploy-uat:
+  stage: deploy-uat
+  image: alpine/helm:latest
+  script:
+    - helm upgrade --install beer-app-uat ./k8s-chart -f k8s-chart/values.yaml -f k8s-chart/env/uat/values.yaml -n uat --create-namespace
+  only:
+    - uat
+
+deploy-prod:
+  stage: deploy-prod
+  image: alpine/helm:latest
+  script:
+    - helm upgrade --install beer-app-prod ./k8s-chart -f k8s-chart/values.yaml -f k8s-chart/env/prod/values.yaml -n prod --create-namespace
+  only:
+    - prod

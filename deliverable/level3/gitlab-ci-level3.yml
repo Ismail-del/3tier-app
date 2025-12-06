@@ -1,0 +1,19 @@
+stages:
+  - deploy
+
+variables:
+  # Using the provided registry images
+  FRONTEND_IMAGE: registry.gitlab.com/exalt-it-dojo/candidats/ismail-saghraoui-my-favorite-beer-7c96fa87-914c-4065-9938-0d21410191f2/frontend:latest
+  BACKEND_IMAGE: registry.gitlab.com/exalt-it-dojo/candidats/ismail-saghraoui-my-favorite-beer-7c96fa87-914c-4065-9938-0d21410191f2/backend:latest
+
+deploy:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -
+    - kubectl create secret docker-registry gitlab-registry --docker-server=$CI_REGISTRY --docker-username=$CI_REGISTRY_USER --docker-password=$CI_REGISTRY_PASSWORD -n dev --dry-run=client -o yaml | kubectl apply -f -
+    - sed -i "s|IMAGE_FRONTEND|$FRONTEND_IMAGE|g" k8s/frontend.yaml
+    - sed -i "s|IMAGE_BACKEND|$BACKEND_IMAGE|g" k8s/backend.yaml
+    - kubectl apply -f k8s/postgres.yaml
+    - kubectl apply -f k8s/backend.yaml
+    - kubectl apply -f k8s/frontend.yaml

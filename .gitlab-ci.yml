@@ -1,0 +1,17 @@
+stages:
+  - deploy-uat
+  - deploy-prod
+
+deploy-uat:
+  stage: deploy-uat
+  image: alpine/helm:latest
+  script:
+    - helm upgrade --install beer-app-uat ./k8s-chart -f k8s-chart/values.yaml -f k8s-chart/env/uat/values.yaml -n uat --create-namespace --set backend.env.SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL --set backend.env.SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME --set backend.env.SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD
+  
+
+deploy-prod:
+  stage: deploy-prod
+  image: alpine/helm:latest
+  script:
+    - helm upgrade --install beer-app-prod ./k8s-chart -f k8s-chart/values.yaml -f k8s-chart/env/prod/values.yaml -n prod --create-namespace --set backend.env.SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL --set backend.env.SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME --set backend.env.SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD
+  when: manual

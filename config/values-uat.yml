@@ -1,0 +1,15 @@
+# values.yml
+
+frontend:
+  image:
+    repository: #TODO
+    tag: #TODO
+
+backend:
+  image:
+    repository: #TODO
+    tag: #TODO
+
+version: #TODO
+helm-release-name:  #TODO
+helm-release-name-full: #TODO

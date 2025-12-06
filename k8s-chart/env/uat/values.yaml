@@ -1,0 +1,14 @@
+helmReleaseNamefull: beer-app-uat
+helmReleaseName: beer-app-uat
+
+frontend:
+  replicaCount: 1
+  service:
+    type: NodePort
+    nodePort: 30001
+
+backend:
+  replicaCount: 1
+
+postgres:
+  replicaCount: 1

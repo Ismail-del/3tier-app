@@ -1,0 +1,44 @@
+Vérifier si l'ingress est bien installé
+
+kubectl get ingress -n prod
+
+s'il est pas installé, il faut le mettre en place : 
+
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+
+mettre en place le ingress resources
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-beer-app-prod
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: beer-app.local
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: service-frontend-beer-app-prod
+              port:
+                number:  4200
+
+et après après il faut vérifier si l'address depuis ingress resources par exemple :
+ ingress-beer-app-prod                     nginx                     beer-app.local                     localhost                     80       
+ 
+ dans ce example l'adresse est 127.0.0.1
+
+Si la machine est Windows: 
+il faut ajouter dans le fichier si 
+C:\Windows\System32\drivers\etc\hosts 
+127.0.0.1  beer-app.local
+ Si Linux/Mac: /etc/hosts
+ 127.0.0.1  beer-app.local
+
+ après accesser l'application via http://beer-app.local

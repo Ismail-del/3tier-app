@@ -1,0 +1,39 @@
+helmReleaseNamefull: beer-app
+helmReleaseName: beer-app
+
+imagePullSecrets:
+  - name: gitlab-registry
+
+frontend:
+  replicaCount: 1
+  image:
+    repository: registry.gitlab.com/exalt-it-dojo/candidats/ismail-saghraoui-my-favorite-beer-7c96fa87-914c-4065-9938-0d21410191f2/frontend
+    tag: latest
+  port: 4200
+  service:
+    type: NodePort
+    nodePort: 30000
+
+backend:
+  replicaCount: 1
+  image:
+    repository: registry.gitlab.com/exalt-it-dojo/candidats/ismail-saghraoui-my-favorite-beer-7c96fa87-914c-4065-9938-0d21410191f2/backend
+    tag: latest
+  port: 8080
+  env:
+    SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/beers
+    SPRING_DATASOURCE_USERNAME: postgres
+    SPRING_DATASOURCE_PASSWORD: password
+
+postgres:
+  replicaCount: 1
+  image:
+    repository: postgres
+    tag: 15
+  port: 5432
+  env:
+    POSTGRES_DB: beers
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: password
+
+ingress: {}
